@@ -1,27 +1,15 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "com.schoolsservicegrpc.grpc";
+option java_package = "com.server.grpc";
 
-service schoolService{
-  rpc getOneByID(id) returns (SchoolObject){}
-  rpc getAll(Empty) returns (SchoolsList){}
-}
-message id{
-  int64 id = 1;
+service serverService{
+  rpc hello(Empty) returns (ResponseServer){}
 }
 
-message SchoolObject{
-  int64 id = 1;
-  string name = 2;
-  string location = 3;
-  int32 status = 4;
+message ResponseServer{
+  string responseMessage = 1;
 }
-
 message Empty{
 
-}
-
-message SchoolsList{
-  repeated SchoolObject school = 1;
 }
