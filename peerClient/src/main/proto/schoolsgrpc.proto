@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.server.grpc";
+
+service serverService{
+  rpc hello(Empty) returns (ResponseServer){}
+}
+
+message ResponseServer{
+  string responseMessage = 1;
+}
+message Empty{
+
+}

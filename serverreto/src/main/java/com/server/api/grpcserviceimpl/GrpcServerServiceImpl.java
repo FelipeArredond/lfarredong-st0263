@@ -1,4 +1,4 @@
-package com.schools.api.grpcserviceimpl;
+package com.server.api.grpcserviceimpl;
 
 import com.server.grpc.Empty;
 import com.server.grpc.ResponseServer;
