@@ -7,7 +7,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 @GrpcService
-public class GrpcSchoolsServiceImpl extends serverServiceGrpc.serverServiceImplBase {
+public class GrpcServerServiceImpl extends serverServiceGrpc.serverServiceImplBase {
 
     @Override
     public void hello(Empty request, StreamObserver<ResponseServer> responseObserver) {
