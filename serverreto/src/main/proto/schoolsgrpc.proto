@@ -5,11 +5,16 @@ option java_package = "com.server.grpc";
 
 service serverService{
   rpc hello(Empty) returns (ResponseServer){}
+  rpc reportFile(FileReport) returns(ResponseServer){}
+}
+
+message FileReport{
+  string fileName = 1;
 }
 
 message ResponseServer{
   string responseMessage = 1;
 }
-message Empty{
 
+message Empty{
 }
