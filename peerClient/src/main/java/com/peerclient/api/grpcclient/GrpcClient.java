@@ -19,10 +19,10 @@ public class GrpcClient {
         return response;
     }
 
-    public String reportFile(String fileName){
+    public String reportFile(FileReport fileReport){
         ManagedChannel channel = NettyChannelBuilder.forTarget("dns:///localhost:9091").usePlaintext().build();
         serverServiceGrpc.serverServiceBlockingStub stub = serverServiceGrpc.newBlockingStub(channel);
-        String response = stub.reportFile(FileReport.newBuilder().setFileName(fileName).build()).getResponseMessage();
+        String response = stub.reportFile(fileReport).getResponseMessage();
         channel.shutdown();
 
         return response;

@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FileReportDTO {
     private String fileName;
+    private String peerName;
 }

@@ -10,6 +10,7 @@ service serverService{
 
 message FileReport{
   string fileName = 1;
+  string peerName = 2;
 }
 
 message ResponseServer{
