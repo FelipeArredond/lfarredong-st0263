@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class GrpcClient {
 
-    ManagedChannel channel = NettyChannelBuilder.forTarget("dns:///localhost:9091").usePlaintext().build();
-
     public String getServerMessage(){
+        ManagedChannel channel = NettyChannelBuilder.forTarget("dns:///localhost:9091").usePlaintext().build();
         serverServiceGrpc.serverServiceBlockingStub stub = serverServiceGrpc.newBlockingStub(channel);
         String response = stub.hello(Empty.newBuilder().build()).getResponseMessage();
         channel.shutdown();
@@ -21,6 +20,7 @@ public class GrpcClient {
     }
 
     public String reportFile(String fileName){
+        ManagedChannel channel = NettyChannelBuilder.forTarget("dns:///localhost:9091").usePlaintext().build();
         serverServiceGrpc.serverServiceBlockingStub stub = serverServiceGrpc.newBlockingStub(channel);
         String response = stub.reportFile(FileReport.newBuilder().setFileName(fileName).build()).getResponseMessage();
         channel.shutdown();
