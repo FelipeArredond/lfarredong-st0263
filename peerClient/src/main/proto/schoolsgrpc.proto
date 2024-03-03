@@ -5,7 +5,16 @@ option java_package = "com.server.grpc";
 
 service serverService{
   rpc hello(Empty) returns (ResponseServer){}
-  rpc reportFile(FileReport) returns(ResponseServer){}
+  rpc reportFile(FileReport) returns (ResponseServer){}
+  rpc getFileLocation(FileName) returns (PeerWithFile){}
+}
+
+message PeerWithFile{
+  string peerName = 1;
+}
+
+message FileName{
+  string fileName = 1;
 }
 
 message FileReport{

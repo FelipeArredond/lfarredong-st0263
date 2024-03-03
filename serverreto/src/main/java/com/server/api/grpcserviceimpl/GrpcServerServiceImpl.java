@@ -2,10 +2,7 @@ package com.server.api.grpcserviceimpl;
 
 import com.server.api.repository.FileEntity;
 import com.server.api.repository.FileRepository;
-import com.server.grpc.Empty;
-import com.server.grpc.FileReport;
-import com.server.grpc.ResponseServer;
-import com.server.grpc.serverServiceGrpc;
+import com.server.grpc.*;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -28,6 +25,13 @@ public class GrpcServerServiceImpl extends serverServiceGrpc.serverServiceImplBa
         System.out.println(fileRepository.save(FileEntity.builder().fileName(request.getFileName()).peerName(request.getPeerName()).build()));
         ResponseServer responseServer = ResponseServer.newBuilder().setResponseMessage("File " + request.getFileName() + " saved succesfully").build();
         responseObserver.onNext(responseServer);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void getFileLocation(FileName request, StreamObserver<PeerWithFile> responseObserver) {
+        FileEntity fileData = fileRepository.findByFileName(request.getFileName()).orElse(FileEntity.builder().peerName("No peer listed with this file").build());
+        responseObserver.onNext(PeerWithFile.newBuilder().setPeerName(fileData.getPeerName()).build());
         responseObserver.onCompleted();
     }
 }
