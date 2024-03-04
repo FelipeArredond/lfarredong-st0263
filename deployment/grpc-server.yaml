@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: grpc-server
-          image: felipearredond/telematica:version1
+          image: felipearredond/telematica:version2
           ports:
             - containerPort: 9091
           env:
@@ -25,11 +25,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: grpc-server
+  name: grpc-server-service
 spec:
   selector:
     app: grpc-server
-  type: NodePort       
+  type: ClusterIP       
   ports:
     - protocol: TCP
       port: 9091

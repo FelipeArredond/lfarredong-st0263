@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-peer-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-peer-1
+  template:
+    metadata:
+      labels:
+        app: grpc-peer-1
+    spec:
+      containers:
+        - name: grpc-peer-1
+          image: felipearredond/telematica_client:version5
+          ports:
+            - containerPort: 8081
+          env:
+            - name : GRPC_HOST
+              value: "grpc-server-service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-peer-1
+spec:
+  selector:
+    app: grpc-peer-1
+  type: NodePort       
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
+
