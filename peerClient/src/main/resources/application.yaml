@@ -1,0 +1,11 @@
+server:
+  port: 8081
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+service:
+  grpc:
+    peerName: ${PEER_NAME:peer_1}
+    host: ${GRPC_HOST:localhost}

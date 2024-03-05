@@ -1,13 +1,15 @@
 package com.peerclient.api.controllers;
 
+import com.peerclient.api.configuration.Token;
 import com.peerclient.api.entities.FileNameDTO;
 import com.peerclient.api.entities.FileReportDTO;
 import com.peerclient.api.entities.PeerWithFileDTO;
 import com.peerclient.api.grpcclient.GrpcClient;
+import com.server.grpc.Empty;
 import com.server.grpc.FileName;
 import com.server.grpc.FileReport;
-import com.server.grpc.PeerWithFile;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class StudentsController {
 
     private final GrpcClient grpcClient;
+    private final Token token;
+    @Value("${service.grpc.peerName}")
+    private String peerName;
 
     @GetMapping("/state")
     public ResponseEntity<String> getStudentCompleteInfo() {
@@ -25,7 +30,24 @@ public class StudentsController {
 
     @PostMapping("/reportFile")
     public String reportFile(@RequestBody FileReportDTO fileReport) {
-        return grpcClient.reportFile(FileReport.newBuilder().setFileName(fileReport.getFileName()).setPeerName(fileReport.getPeerName()).build());
+        return grpcClient.reportFile(FileReport.newBuilder().setFileName(fileReport.getFileName()).setPeerName(peerName).build());
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Token> login() {
+        String token = grpcClient.login(Empty.newBuilder().build()).getToken();
+        this.token.setValue(token);
+        System.out.println(this.token.getValue());
+        return ResponseEntity.ok().body(this.token);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        String response = grpcClient.logout(peerName);
+        this.token.setValue("");
+        System.out.println(response);
+        System.out.println("The token is : " + this.token.getValue());
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/location")

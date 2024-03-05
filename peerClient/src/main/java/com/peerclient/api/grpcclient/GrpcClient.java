@@ -39,4 +39,22 @@ public class GrpcClient {
         return response;
     }
 
+    public Token login(Empty empty){
+        ManagedChannel channel = NettyChannelBuilder.forTarget(hostName +  ":9091").usePlaintext().build();
+        serverServiceGrpc.serverServiceBlockingStub stub = serverServiceGrpc.newBlockingStub(channel);
+        Token response = stub.login(empty);
+        channel.shutdown();
+
+        return response;
+    }
+
+    public String logout(String peerName){
+        ManagedChannel channel = NettyChannelBuilder.forTarget(hostName +  ":9091").usePlaintext().build();
+        serverServiceGrpc.serverServiceBlockingStub stub = serverServiceGrpc.newBlockingStub(channel);
+        ResponseServer response = stub.logout(PeerName.newBuilder().setPeerName(peerName).build());
+        channel.shutdown();
+
+        return response.getResponseMessage();
+    }
+
 }
