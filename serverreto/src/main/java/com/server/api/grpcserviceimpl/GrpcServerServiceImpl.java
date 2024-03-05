@@ -29,6 +29,20 @@ public class GrpcServerServiceImpl extends serverServiceGrpc.serverServiceImplBa
     }
 
     @Override
+    public void login(Empty request, StreamObserver<Token> responseObserver) {
+        responseObserver.onNext(Token.newBuilder().setToken("123456").build());
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void logout(PeerName request, StreamObserver<ResponseServer> responseObserver) {
+        fileRepository.deleteAllByPeerName(request.getPeerName());
+        ResponseServer responseServer = ResponseServer.newBuilder().setResponseMessage("Files of " + request.getPeerName() + " deleted succesfully").build();
+        responseObserver.onNext(responseServer);
+        responseObserver.onCompleted();
+    }
+
+    @Override
     public void getFileLocation(FileName request, StreamObserver<PeerWithFile> responseObserver) {
         FileEntity fileData = fileRepository.findByFileName(request.getFileName()).orElse(FileEntity.builder().peerName("No peer listed with this file").build());
         responseObserver.onNext(PeerWithFile.newBuilder().setPeerName(fileData.getPeerName()).build());

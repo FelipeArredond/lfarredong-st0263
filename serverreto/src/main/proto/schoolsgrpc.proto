@@ -7,9 +7,19 @@ service serverService{
   rpc hello(Empty) returns (ResponseServer){}
   rpc reportFile(FileReport) returns (ResponseServer){}
   rpc getFileLocation(FileName) returns (PeerWithFile){}
+  rpc login(Empty) returns (Token) {}
+  rpc logout(PeerName) returns (ResponseServer) {}
+}
+
+message Token{
+  string token = 1;
 }
 
 message PeerWithFile{
+  string peerName = 1;
+}
+
+message PeerName{
   string peerName = 1;
 }
 
