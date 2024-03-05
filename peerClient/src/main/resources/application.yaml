@@ -5,6 +5,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  datasource:
+    url: jdbc:h2:mem:filesdb
+    driverClassName: org.h2.Driver
+    database-platform: org.hibernate.dialect.H2Dialect
 service:
   grpc:
     peerName: ${PEER_NAME:peer_1}

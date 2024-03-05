@@ -1,9 +1,7 @@
 package com.peerclient.api.controllers;
 
 import com.peerclient.api.configuration.Token;
-import com.peerclient.api.entities.FileNameDTO;
-import com.peerclient.api.entities.FileReportDTO;
-import com.peerclient.api.entities.PeerWithFileDTO;
+import com.peerclient.api.entities.*;
 import com.peerclient.api.grpcclient.GrpcClient;
 import com.server.grpc.Empty;
 import com.server.grpc.FileName;
@@ -20,6 +18,7 @@ public class StudentsController {
 
     private final GrpcClient grpcClient;
     private final Token token;
+    private final FileRepository repository;
     @Value("${service.grpc.peerName}")
     private String peerName;
 
@@ -50,9 +49,16 @@ public class StudentsController {
         return ResponseEntity.ok().body(response);
     }
 
-    @GetMapping("/location")
+    @GetMapping("/download")
     public ResponseEntity<PeerWithFileDTO> getFileLocation(@RequestBody FileNameDTO fileName) {
-        return ResponseEntity.ok(PeerWithFileDTO.builder().peerName(grpcClient.peerWithFile(FileName.newBuilder().setFileName(fileName.getFileName()).build()).getPeerName()).build());
+        PeerWithFileDTO fileDTO = PeerWithFileDTO.builder().peerName(grpcClient.peerWithFile(FileName.newBuilder().setFileName(fileName.getFileName()).build()).getPeerName()).build();
+        if(!fileDTO.getPeerName().equals("No peer listed with this file")){
+            if(!repository.existsByName(fileName.getFileName())){
+                repository.save(Files.builder().name(fileName.getFileName()).build());
+            }
+            reportFile(FileReportDTO.builder().fileName(fileName.getFileName()).build());
+        }
+        return ResponseEntity.ok().body(fileDTO);
     }
 
 }

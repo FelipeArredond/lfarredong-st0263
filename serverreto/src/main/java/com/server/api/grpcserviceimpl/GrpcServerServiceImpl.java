@@ -22,7 +22,9 @@ public class GrpcServerServiceImpl extends serverServiceGrpc.serverServiceImplBa
 
     @Override
     public void reportFile(FileReport request, StreamObserver<ResponseServer> responseObserver) {
-        System.out.println(fileRepository.save(FileEntity.builder().fileName(request.getFileName()).peerName(request.getPeerName()).build()));
+        if(!fileRepository.existsByFileName(request.getFileName())){
+            System.out.println(fileRepository.save(FileEntity.builder().fileName(request.getFileName()).peerName(request.getPeerName()).build()));
+        }
         ResponseServer responseServer = ResponseServer.newBuilder().setResponseMessage("File " + request.getFileName() + " saved succesfully").build();
         responseObserver.onNext(responseServer);
         responseObserver.onCompleted();
@@ -44,7 +46,12 @@ public class GrpcServerServiceImpl extends serverServiceGrpc.serverServiceImplBa
 
     @Override
     public void getFileLocation(FileName request, StreamObserver<PeerWithFile> responseObserver) {
-        FileEntity fileData = fileRepository.findByFileName(request.getFileName()).orElse(FileEntity.builder().peerName("No peer listed with this file").build());
+        FileEntity fileData = FileEntity.builder().build();
+        if(fileRepository.findAllByFileName(request.getFileName()).size() == 0){
+            fileData.setPeerName("No peer listed with this file");
+        }else {
+            fileData.setPeerName(fileRepository.findAllByFileName(request.getFileName()).get(0).getPeerName());
+        }
         responseObserver.onNext(PeerWithFile.newBuilder().setPeerName(fileData.getPeerName()).build());
         responseObserver.onCompleted();
     }
