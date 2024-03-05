@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.pserver.grpc";
+
+service pserverService{
+  rpc download(File) returns (Response){}
+  rpc upload(File) returns (Response){}
+}
+
+message File{
+  string fileName = 1;
+}
+
+message Response{
+  string message = 1;
+}
