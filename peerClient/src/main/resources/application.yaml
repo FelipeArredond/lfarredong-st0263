@@ -11,5 +11,9 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
 service:
   grpc:
-    peerName: ${PEER_NAME:peer_1}
+    peerName: ${PEER_NAME:grpc-peer-1}
+    neighbor: ${NEIGHBOR_NAME:grpc-peer-2}
     host: ${GRPC_HOST:localhost}
+grpc:
+  server:
+    port: 9091

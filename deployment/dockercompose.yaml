@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  client1:
+    image: felipearredon/client:latest
+    ports:
+      - "8001:80" # Map container port 80 to host port 8001
+    environment:
+      - ENV_VAR_NAME=value
+      - ANOTHER_VAR=another_value
+
+  peer1:
+    image: felipearredond/telematica_client:version8
+    ports:
+      - "8002:80" # Map container port 80 to host port 8002
+    environment:
+      - ENV_VAR_NAME=value
+      - ANOTHER_VAR=another_value
+
+  peer2:
+    image: felipearredond/telematica_client:version8
+    ports:
+      - "8003:80" # Map container port 80 to host port 8003
+    environment:
+      - GRPC_HOST=grpc-server-service
+      - NEIGHBOR_NAME=another_value

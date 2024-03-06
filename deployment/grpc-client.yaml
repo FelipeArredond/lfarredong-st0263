@@ -14,12 +14,17 @@ spec:
     spec:
       containers:
         - name: grpc-peer-1
-          image: felipearredond/telematica_client:version5
+          image: felipearredond/telematica_client:version13
           ports:
             - containerPort: 8081
+            - containerPort: 9091
           env:
             - name : GRPC_HOST
               value: "grpc-server-service"
+            - name : NEIGHBOR_NAME
+              value: "grpc-peer-2-grpc"
+            - name: PEER_NAME
+              value: "grpc-peer-1"
 ---
 apiVersion: v1
 kind: Service
@@ -33,6 +38,21 @@ spec:
     - protocol: TCP
       port: 8081
       targetPort: 8081
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-peer-1-grpc
+spec:
+  selector:
+    app: grpc-peer-1
+  type: NodePort       
+  ports:
+    - protocol: TCP
+      port: 9091
+      targetPort: 9091
 
 ---
 
@@ -52,12 +72,17 @@ spec:
     spec:
       containers:
         - name: grpc-peer-2
-          image: felipearredond/telematica_client:version5
+          image: felipearredond/telematica_client:version13
           ports:
             - containerPort: 8081
+            - containerPort: 9091
           env:
             - name : GRPC_HOST
               value: "grpc-server-service"
+            - name : NEIGHBOR_NAME
+              value: "grpc-peer-1-grpc"
+            - name: PEER_NAME
+              value: "grpc-peer-2"
 ---
 
 apiVersion: v1
@@ -72,3 +97,18 @@ spec:
     - protocol: TCP
       port: 8081
       targetPort: 8081
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-peer-2-grpc
+spec:
+  selector:
+    app: grpc-peer-2
+  type: ClusterIP       
+  ports:
+    - protocol: TCP
+      port: 9091
+      targetPort: 9091

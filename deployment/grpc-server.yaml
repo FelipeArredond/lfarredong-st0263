@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: grpc-server
-          image: felipearredond/telematica:version2
+          image: felipearredond/telematica:version3
           ports:
             - containerPort: 9091
           env:
