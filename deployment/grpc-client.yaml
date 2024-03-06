@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: grpc-peer-1
-          image: felipearredond/telematica_client:version13
+          image: felipearredond/telematica_client:version14
           ports:
             - containerPort: 8081
             - containerPort: 9091
@@ -72,7 +72,7 @@ spec:
     spec:
       containers:
         - name: grpc-peer-2
-          image: felipearredond/telematica_client:version13
+          image: felipearredond/telematica_client:version14
           ports:
             - containerPort: 8081
             - containerPort: 9091
